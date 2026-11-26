@@ -1,0 +1,46 @@
+@startwbs
+title Sơ đồ Phân rã Chức năng (BFD 3 cấp) - Phân hệ 1: Quản lý Mặt bằng & Hợp đồng Thuê (TV1)
+
+<style>
+wbsDiagram {
+    BackgroundColor #FFFFFF
+    FontName Segoe UI
+    FontSize 12
+    node {
+        BackgroundColor #EAF2F8
+        BorderColor #1F4E78
+        FontColor #1B2631
+        RoundCorner 8
+    }
+    :depth(0) {
+        BackgroundColor #1F4E78
+        FontColor #FFFFFF
+        FontStyle bold
+    }
+    :depth(1) {
+        BackgroundColor #2E86C1
+        FontColor #FFFFFF
+        FontStyle bold
+    }
+}
+</style>
+
+* F1. Quản lý Gian hàng, Mặt bằng & Hợp đồng Thuê\n(Phân hệ 1 - TV1)
+** F1.1 Quản lý Mặt bằng & Vị trí
+*** F1.1.1 Quản lý danh mục phân khu & lô gian hàng\n(frm001_dm_vi_tri_gian_hang)
+*** F1.1.2 Lọc đa tiêu chí mặt bằng\n(Tầng, Diện tích, Trạng thái)
+*** F1.1.3 Tra cứu trực quan sơ đồ mặt bằng theo tầng\n(frm002_nv_tra_cuu_mat_bang)
+*** F1.1.4 Báo cáo tỷ lệ lấp đầy & phân bổ diện tích\n(BC1 - Excel/PDF & Biểu đồ)
+** F1.2 Quản lý Khách thuê
+*** F1.2.1 Quản lý hồ sơ đối tác & thương hiệu thuê\n(frm001_dm_khach_thue)
+*** F1.2.2 Thẩm định ngành hàng & kiểm tra MST hợp lệ\n(F&B, Fashion, Tech, Cinema...)
+*** F1.2.3 Tra cứu lịch sử thuê & hợp đồng của đối tác\n(frm001_dm_khach_thue)
+** F1.3 Quản lý Hợp đồng & Bàn giao
+*** F1.3.1 Lập Hợp đồng thuê mặt bằng (Master-Detail)\n(frm002_nv_hop_dong_thue)
+*** F1.3.2 Tính giá thuê & chiết khấu động (Strategy Pattern)\n(Standard, EarlyBird, LongTerm)
+*** F1.3.3 Phê duyệt Hợp đồng thuê theo RBAC\n(Admin duyệt HĐ > 500 triệu)
+*** F1.3.4 Lập Biên bản bàn giao nhận/trả mặt bằng (Master-Detail)\n(frm002_nv_ban_giao_mat_bang)
+*** F1.3.5 Thanh lý HĐ & Kiểm tra tất toán công nợ TV2\n(Gọi IBillingService & bắn ContractTerminatedEvent)
+*** F1.3.6 Báo cáo theo dõi hạn HĐ & cảnh báo 30/60 ngày\n(BC2 - Excel/PDF)
+
+@endwbs
