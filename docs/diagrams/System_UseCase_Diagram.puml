@@ -1,0 +1,70 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Segoe UI
+skinparam actorStyle awesome
+
+title Sơ đồ Use Case Tổng thể - Hệ thống Quản lý Trung tâm Thương mại (TTTM)
+
+actor "Ban Quản lý\n(Admin)" as Admin #1F4E78
+actor "Nhân viên Mặt bằng\n(LeasingStaff)" as LeasingStaff #2E86C1
+actor "Kế toán Thu phí\n(BillingStaff)" as BillingStaff #1E8449
+
+' Kế thừa quyền RBAC: Admin bao gồm toàn quyền quản trị
+Admin -|> LeasingStaff
+Admin -|> BillingStaff
+
+rectangle "Hệ thống Quản lý Trung tâm Thương mại (TTTM)" {
+
+    package "Hệ thống Chung (Shared Platform)" #F4F6F7 {
+        usecase "Đăng nhập & Xác thực RBAC\n(frm000_dang_nhap)" as UC_Login
+        usecase "UC10: Thống kê Báo cáo &\nDashboard Doanh thu (BC1-BC5)" as UC10
+    }
+
+    package "Phân hệ 1: Quản lý Mặt bằng & Hợp đồng Thuê (TV1)" #EBF5FB {
+        usecase "UC01: Quản lý Phân khu &\nVị trí Gian hàng (Lọc đa tiêu chí)" as UC01
+        usecase "UC02: Quản lý Khách thuê &\nTra cứu Sơ đồ Mặt bằng" as UC02
+        usecase "UC03: Lập & Phê duyệt\nHợp đồng Thuê (Master-Detail)" as UC03
+        usecase "UC04: Lập Biên bản Bàn giao\nNhận/Trả Mặt bằng (Master-Detail)" as UC04
+        usecase "UC05: Thanh lý Hợp đồng &\nGiải phóng Mặt bằng" as UC05
+    }
+
+    package "Phân hệ 2: Dịch vụ Tiện ích, Hóa đơn & Công nợ (TV2)" #E9F7EF {
+        usecase "UC06: Quản lý Dịch vụ Tiện ích,\nBảng giá Bậc thang & PTTT" as UC06
+        usecase "UC07: Chốt Chỉ số Điện/Nước\nĐịnh kỳ Hàng tháng (Master-Detail)" as UC07
+        usecase "UC08: Lập Hóa đơn Tổng hợp\nHàng tháng (Master-Detail)" as UC08
+        usecase "UC09: Thu tiền, Cấn trừ Công nợ\n& Tính Phạt Chậm nộp" as UC09
+    }
+}
+
+' Liên kết Actor -> Use Case
+LeasingStaff --> UC_Login
+BillingStaff --> UC_Login
+
+LeasingStaff --> UC01
+LeasingStaff --> UC02
+LeasingStaff --> UC03
+LeasingStaff --> UC04
+LeasingStaff --> UC05
+LeasingStaff --> UC10
+
+BillingStaff --> UC06
+BillingStaff --> UC07
+BillingStaff --> UC08
+BillingStaff --> UC09
+BillingStaff --> UC10
+
+' Quan hệ nội bộ & Liên phân hệ TV1 <-> TV2
+UC03 ..> UC01 : <<include>>\nKiểm tra lô trống
+UC03 ..> UC02 : <<include>>\nXác thực khách thuê
+UC04 ..> UC03 : <<include>>\nHợp đồng Active
+
+UC08 ..> UC07 : <<include>>\nLấy chỉ số tháng
+UC09 ..> UC08 : <<extend>>\nPhạt quá hạn 0.05%/ngày
+
+' 2 Luồng liên phân hệ cốt lõi
+UC08 ..> UC03 : <<include>>\n[Liên PH 1: TV2 gọi ILeasingContractService\nlấy tiền thuê HĐ Active]
+UC05 ..> UC09 : <<include>>\n[Liên PH 2: TV1 gọi IBillingService\nkiểm tra/tất toán công nợ = 0]
+
+@enduml
